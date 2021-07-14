@@ -1,34 +1,22 @@
 #include "fractol.h"
 
-int	main()
+int	main(int argc, char **argv)
 {
-	int		i;
-	int		j;
-	int		height;
-	int		width;
-	void	*mlx_ptr;
-	void	*win_ptr;
+	t_vars	vars;
+	double	height;
+	double	width;
 
-	height = 500;
-	width = 800;
-	mlx_ptr = mlx_init();
-	win_ptr = mlx_new_window(mlx_ptr, width, height, "mlx");
-	//mlx_pixel_put(mlx_ptr, win_ptr, 50, 50, 0x00FFFFFF);
-	//mlx_string_put(mlx_ptr, win_ptr, 0, 0, 0x00FFFFFF, "dsad");
-	i = 0;
-	while (i < width)
-	{
-		j = 0;
-		while (j < height)
-		{
-			if (mandelbrot(CMPLX(i, j)) >= 80)
-			{
-				printf("%d\n", mandelbrot((CMPLX(i, j))));
-				mlx_pixel_put(mlx_ptr, win_ptr, i, j, 0x00FFFFFF);
-			}
-			j++;
-		}
-		i++;
-	}
-	mlx_loop(mlx_ptr);
+	height = 1000;
+	width = 1000;
+	vars.mlx = mlx_init();
+	vars.win = mlx_new_window(vars.mlx, width, height, "mlx");
+	if (argc != 2)
+		return (0);
+	if (check(argv[1]) == 1)
+		draw_mandelbrot(&vars, height, width);
+	else if (check(argv[1]) == 0)
+		draw_julian(&vars, height, width);
+	mlx_hook(vars.win, 2, 1L<<0, close, &vars);
+	mlx_mouse_hook(vars.win, zoom, &vars);
+	mlx_loop(vars.mlx);
 }
