@@ -1,6 +1,6 @@
 #include "fractol.h"
 
-void	draw_julian(t_vars *vars, double height, double width)
+void	draw_julian(t_vars *vars)
 {
 	double	i;
 	double	j;
@@ -9,16 +9,17 @@ void	draw_julian(t_vars *vars, double height, double width)
 	int		m;
 
 	i = 0;
-	while (i < width)
+	vars->zoom = 300;
+	vars->color = 2056;
+	while (i < vars->width)
 	{
 		j = 0;
-		while (j < height)
+		while (j < vars->height)
 		{
-			c.real = -2 + ((4 * i) / width);
-			c.imag = 2 - ((4 * j) / height);
-			m = julian(c);
-			color = create_color(m);
-			mlx_pixel_put((*vars).mlx, (*vars).win, i, j, color);
+			c.real = i / vars->zoom + vars->x1;
+			c.imag = j / vars->zoom + vars->y1;
+			m = julian(c, vars);
+			mlx_pixel_put((*vars).mlx, (*vars).win, i, j, m * vars->color);
 			j++;
 		}
 		i++;
@@ -26,3 +27,14 @@ void	draw_julian(t_vars *vars, double height, double width)
 
 }
 
+void	julian_init(t_vars *vars)
+{
+	vars->max_it = 50;
+	vars->zoom = 200;
+	vars->x1 = -2.0;
+	vars->y1 = -1.9;
+	vars->color = 265;
+	//vars->c_r = 0.285;
+	//vars->c_i = 0.01;
+	//vars->julia_mouse = 1;
+}
