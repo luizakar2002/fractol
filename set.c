@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   set.c                                              :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: lukarape <marvin@42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2021/07/27 14:39:26 by lukarape          #+#    #+#             */
+/*   Updated: 2021/07/27 14:39:29 by lukarape         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "fractol.h"
 
 int		trgb(int t, int r, int g, int b)
@@ -40,41 +52,19 @@ int		compare(char *s1, char *s2)
 
 int		check(char *str)
 {
-	if (compare(str, "julian"))
+	if (compare(str, "julia"))
 		return (0);
 	if (compare(str, "mandelbrot"))
 		return (1);
+	if (compare(str, "burningship"))
+		return (2);
 	return (9);
 }
 
-int		mandelbrot(comp c, t_vars *vars)
+void	my_mlx_pixel_put(t_vars *vars, int x, int y, int color)
 {
-	int		n;
-	comp	z;
+	char	*dst;
 
-	n = 0;
-	z = (comp) {.real = 0, .imag = 0};
-	while (module(z) <= 2 && n < vars->max_it)
-	{
-		z = multiply(z, z);
-		z = add(z, c);
-		n++;
-	}
-	return (n);
-}
-
-int		julian(comp c, t_vars *vars)
-{
-	int		n;
-	comp	z;
-
-	n = 0;
-	z = (comp) {.real = -0.7795, .imag = 0.134};
-	while (module(c) <= 2 && n <= vars->max_it)
-	{
-		c = multiply(c, c);
-		c = add(c, z);
-		n++;
-	}
-	return (n);
+	dst = vars->addr + (y * vars->line_length + x * (vars->bpp / 8));
+	*(unsigned int*)dst = color;
 }
